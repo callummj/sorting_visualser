@@ -1,6 +1,6 @@
 import React from "react";
 import './Toolbar.css';
-import Visualiser from "./Visualiser";
+
 
 
 export default class Toolbar extends React.Component{
