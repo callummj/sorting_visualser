@@ -10,6 +10,15 @@ export default class Visualiser extends React.Component{
     }
 
     render(){
+        var data = [];
+
+        for (let i = 0; i < 20; i++){
+            data.push(Math.floor(Math.random() * (100 - 0 + 1) ) + 0);
+        }
+
+        console.log("Data: " + data);
+        //TODO For some reason it generates two different lists. This must mean that the <visualiser/> component is being called twice somewhere
+
         return(
             <p>test</p>
         )
@@ -18,5 +27,6 @@ export default class Visualiser extends React.Component{
     drawArray(data){
         console.log("array: " + data);
     }
+
 
 }

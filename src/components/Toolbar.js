@@ -15,12 +15,15 @@ export default class Toolbar extends React.Component{
 
     generateData(){
 
+        console.log("Generate button clicked");
+
         var data = [];
         for (var i = 0; i < 20; i++){
             data.push(Math.floor(Math.random() * 100)+1);
         }
 
-        Visualiser.setState(data, data);
+        console.log(data);
+        //Visualiser.setState(data, data);
         //console.log("Random array: " + data);
         //Visualiser.drawArray(data);
 
