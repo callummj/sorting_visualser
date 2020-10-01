@@ -1,32 +1,71 @@
 import React from "react";
 
 import './Visualiser.css';
+import Toolbar from "./Toolbar";
+import ReactDOM from "react-dom";
 
 export default class Visualiser extends React.Component{
 
-    constructor(props) {
+    //Initialises Data
+    constructor (props){
         super(props);
-        this.setState.data = "test data";
-    }
 
-    render(){
-        var data = [];
-
-        for (let i = 0; i < 20; i++){
-            data.push(Math.floor(Math.random() * (100 - 0 + 1) ) + 0);
+        this.state = {
+            data: [] //initialises data state
         }
 
-        console.log("Data: " + data);
-        //TODO For some reason it generates two different lists. This must mean that the <visualiser/> component is being called twice somewhere
 
+    }
+
+    componentDidMount() {
+        this.generateData();
+    }
+
+    generateData = () =>{
+
+        let dataTemp = [];
+
+        for (let i = 0; i < 20; i++){
+            dataTemp.push(Math.floor(Math.random() * 100)+1);
+        }
+
+        this.setState({
+            data: dataTemp
+        });
+    }
+
+    dataToBars = () =>{
+        var element = '<div>'
+
+        for (let i = 0; i < this.state.data.length; i++){
+            element +=
+                <div
+                className="array-bar">
+
+                </div>
+        }
+
+        element += '</div>';
+
+        console.log("element: " + element);
+        return element;
+    }
+
+    render() {
         return(
-            <p>test</p>
-        )
-    }
+            <div>
 
-    drawArray(data){
-        console.log("array: " + data);
-    }
+                <button onClick={this.generateData}>Generate New Data</button>
 
+                <p>{this.state.data}</p>
+
+                <div className={'arrayArea'}>
+                    <p>{this.dataToBars}</p>
+                </div>
+
+                <p>test</p>
+            </div>
+        );
+    }
 
 }

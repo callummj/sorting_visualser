@@ -1,37 +1,40 @@
 import React from "react";
 import './Toolbar.css';
+import generateData from './Visualiser'
+import Visualiser from "./Visualiser";
+import ReactDOM from 'react-dom'
+
+export default class Toolbar extends React.Component {
+
+    constructor(props) {
+        super(props)
+    }
+
+    handleGenerateButton() {
+        new Visualiser().generateData();
+    }
+
+    sortDataAction() {
+        console.log("Sort data button clicked")
+    }
+
+    render() {
+
+        const {whenClicked} = this.props;
 
 
+        return (
+            <div>
+                <nav className="Toolbar">
+                    <button onClick={this.handleGenerateButton.bind(this)}>Generate New Data</button>
+                    <button onClick={this.sortDataAction}>Sort</button>
+                </nav>
+                <div id={'visualiserArea'}>
+                    <Visualiser/>
+                </div>
+            </div>
 
-export default class Toolbar extends React.Component{
-    render(){
-        return(
-            <nav className = "Toolbar">
-                <button onClick={this.generateData}>Generate New Data</button>
-                <button onClick={this.sortData}>Sort</button>
-            </nav>
         );
     }
-
-    generateData(){
-
-        console.log("Generate button clicked");
-
-        var data = [];
-        for (var i = 0; i < 20; i++){
-            data.push(Math.floor(Math.random() * 100)+1);
-        }
-
-        console.log(data);
-        //Visualiser.setState(data, data);
-        //console.log("Random array: " + data);
-        //Visualiser.drawArray(data);
-
-    }
-
-    sortData(){
-
-
-        console.log("Sort Data button");
-    }
 }
+
