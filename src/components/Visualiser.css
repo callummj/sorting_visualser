@@ -3,10 +3,29 @@ p{
 }
 
 
-.array-bar {
-    width: 2px;
-    display: inline-block;
-    margin: 0 1px;
-    background-color: red;
-    height: 100px;
+/* Container for array area */
+.array-container{
+    height: 100%;
+    display: flex;
+    justify-content: center;
 }
+
+
+/* CSS for each array bar*/
+.arraybar {
+    margin: 1px;
+    width: 20px;
+    background: darkred;
+    display: inline-block;
+}
+.arraybar:hover{
+    background: red;
+    transition: 0.1s;
+}
+
+.rectangle{
+    width: 200px;
+    height: 50px;
+    background: red;
+}
+
