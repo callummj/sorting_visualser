@@ -1,8 +1,7 @@
 import React from "react";
 import './Toolbar.css';
-import generateData from './Visualiser'
 import Visualiser from "./Visualiser";
-import ReactDOM from 'react-dom'
+
 
 export default class Toolbar extends React.Component {
 
@@ -21,7 +20,6 @@ export default class Toolbar extends React.Component {
     render() {
 
         const {whenClicked} = this.props;
-
 
         return (
             <div>
