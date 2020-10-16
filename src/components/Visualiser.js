@@ -34,6 +34,7 @@ export default class Visualiser extends React.Component{
         }
 
 
+        console.log(dataTemp);
         this.setState({
             data: dataTemp,
         });
@@ -45,7 +46,6 @@ export default class Visualiser extends React.Component{
 
     //Creates a bar representing each piece of data in the array, using CSS capsulated in a <div>
     dataToBars = () => {
-
         return( <div>
             {
                 this.state.data.map(i => (
@@ -70,13 +70,10 @@ export default class Visualiser extends React.Component{
             }
         }, 50);
 
-
-
         this.setState({data: this.quickSort(this.state.data)});
     }
 
-    //credits: https://www.w3resource.com/javascript-exercises/searching-and-sorting-algorithm/searching-and-sorting-algorithm-exercise-1.php
-    //using tempoarily for function
+
     quickSort(startArray) {
         if (startArray.length <= 1) {
             return startArray;
@@ -84,13 +81,12 @@ export default class Visualiser extends React.Component{
             var leftArray = [];
             var rightArray = [];
             var newArray = [];
-
-            var pivot = startArray.pop(); //Start at the end of the array
+            var partitionPoint = startArray.pop(); //Start at the end of the array
             var arrLength = startArray.length; //gets a fixed length value as it will change
 
             for (var i = 0; i < arrLength; i++) {
 
-                if (startArray[i] <= pivot) {
+                if (startArray[i] <= partitionPoint) {
                     leftArray.push(startArray[i]);
                 } else {
                     rightArray.push(startArray[i]);
@@ -98,10 +94,10 @@ export default class Visualiser extends React.Component{
                 }
 
                 var updateVar =[]
-                this.update(updateVar.concat(leftArray, pivot, rightArray))
+                this.update(updateVar.concat(leftArray, partitionPoint, rightArray))
 
             }
-            return newArray.concat(this.quickSort(leftArray), pivot, this.quickSort(rightArray));
+            return newArray.concat(this.quickSort(leftArray), partitionPoint, this.quickSort(rightArray));
         }
     }
 
@@ -170,28 +166,25 @@ export default class Visualiser extends React.Component{
         clearInterval(this.interval);
     }
 
+
     bubbleSortTable(array) {
         let stopLoop = true;
         let arrayLength = array.length; //Gets a fixed variable of array length
         for (let i = 0; i < arrayLength; i++) {
-            console.log("i: " + i)
             for (let j = 0; j < arrayLength; j++) { //Inner for loop to loop over
                 if (array[j] > array[j + 1]) {
                     let tmp = array[j];
                     array[j] = array[j + 1];
                     array[j + 1] = tmp;
-                    stopLoop = false;
-                    console.log("j: " + j)
-                    break
+                    stopLoop = false; //Allows for the interval timer to run in the handler function
+                    this.setState({data: array});
+                    j = arrayLength+1;
                 }
-                this.update(array);
-
             }
-
         }
+
         return stopLoop;
     }
-
     //Bubble sort method
     bubbleSortHandler = () => {
         let parent = this;
@@ -202,7 +195,7 @@ export default class Visualiser extends React.Component{
             } else {
                 clearInterval(timer)
             }
-        }, 50);
+        }, 500);
 
         return array;
     };
@@ -228,8 +221,6 @@ export default class Visualiser extends React.Component{
                     {this.dataToBars()}
                 </div>
 
-
-                <p>test</p>
             </div>
         );
     }

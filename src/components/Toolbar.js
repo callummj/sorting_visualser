@@ -1,7 +1,7 @@
 import React from "react";
 import './Toolbar.css';
 import Visualiser from "./Visualiser";
-
+import  "./Visualiser";
 
 export default class Toolbar extends React.Component {
 
@@ -10,7 +10,7 @@ export default class Toolbar extends React.Component {
     }
 
     handleGenerateButton() {
-        new Visualiser().generateData();
+        //new Visualiser().generateData();
     }
 
     sortDataAction() {
