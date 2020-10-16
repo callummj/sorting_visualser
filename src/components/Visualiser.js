@@ -3,7 +3,6 @@ import React from "react";
 import './Visualiser.css';
 
 
-
 import Toolbar from "./Toolbar";
 import ReactDOM from "react-dom";
 import App from "../App";
@@ -23,6 +22,7 @@ export default class Visualiser extends React.Component{
 
     componentDidMount() {
         this.generateData();
+
     }
 
     //Generates Data & sets the Data state to its value
@@ -34,7 +34,7 @@ export default class Visualiser extends React.Component{
         }
 
 
-        console.log(dataTemp);
+
         this.setState({
             data: dataTemp,
         });
@@ -46,7 +46,7 @@ export default class Visualiser extends React.Component{
 
     //Creates a bar representing each piece of data in the array, using CSS capsulated in a <div>
     dataToBars = () => {
-        return( <div>
+        return( <div id = "bars">
             {
                 this.state.data.map(i => (
                     <div key = {Math.random() * 100} className="arraybar"  style={{
@@ -156,8 +156,6 @@ export default class Visualiser extends React.Component{
         this.setState(state => ({
             date: array
         }));
-
-
     }
 
 
@@ -168,20 +166,32 @@ export default class Visualiser extends React.Component{
 
 
     bubbleSortTable(array) {
+        console.log("func called")
         let stopLoop = true;
+        let stopNestedLoop = false;
         let arrayLength = array.length; //Gets a fixed variable of array length
         for (let i = 0; i < arrayLength; i++) {
             for (let j = 0; j < arrayLength; j++) { //Inner for loop to loop over
-                if (array[j] > array[j + 1]) {
+                if (array[j] > array[j + 1] && stopNestedLoop === false) {
                     let tmp = array[j];
                     array[j] = array[j + 1];
                     array[j + 1] = tmp;
+                    stopNestedLoop = true;
                     stopLoop = false; //Allows for the interval timer to run in the handler function
-                    this.setState({data: array});
+                    //this.setState({data: array});
                     j = arrayLength+1;
+                    console.log("array: " + array)
+
+                    //drawArray(array);
+//ReactDOM.unmountComponentAtNode(parent)
+                    //ReactDOM.render(document.getElementById('barArea'), this.dataToBars());
+
                 }
             }
         }
+
+        this.update(array);
+        console.log("func ended")
 
         return stopLoop;
     }
@@ -190,15 +200,20 @@ export default class Visualiser extends React.Component{
         let parent = this;
         let array = this.state.data;
         let timer = setInterval(function () {
-            if (parent.bubbleSortTable(array) === false) {
-                parent.bubbleSortTable(array)
-            } else {
+            if (parent.bubbleSortTable(array) === true) {
                 clearInterval(timer)
             }
-        }, 500);
+
+        }, 100);
 
         return array;
     };
+
+    componentDidCatch(error, errorInfo) {
+        // You can also log the error to an error reporting service
+       // logErrorToMyService(error, errorInfo);
+        console.log("error");
+    }
 
     render() {
 
@@ -214,15 +229,24 @@ export default class Visualiser extends React.Component{
                 <button onClick={this.quickSortHandler}>Quick Sort</button>
 
 
-                <p>{this.state.data}</p>
+                <p>
+                    <div>
+                        {(this.state.data.map(i => (
+                        [i + ", "]
+                        )))}
+                    </div>
 
 
-                <div id = "bars" className = "array-container">
+                    </p>
+
+
+                <div id={'barArea'} className = "array-container">
                     {this.dataToBars()}
                 </div>
 
             </div>
         );
     }
+
 
 }
