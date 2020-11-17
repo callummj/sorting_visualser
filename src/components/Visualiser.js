@@ -17,7 +17,6 @@ export default class Visualiser extends React.Component{
             data: [], //initialises data state
         }
 
-
     }
 
     componentDidMount() {
@@ -57,63 +56,129 @@ export default class Visualiser extends React.Component{
 
     }
 
+//Bubble sort function
+    bubbleSortTable(array) {
+        console.log("func called")
+        let stopLoop = true;
+        let stopNestedLoop = false;
+        let arrayLength = array.length; //Gets a fixed variable of array length
+        for (let i = 0; i < arrayLength; i++) {
+            for (let j = 0; j < arrayLength; j++) { //Inner for loop to loop over
+                if (array[j] > array[j + 1] && stopNestedLoop === false) {
+                    let tmp = array[j];
+                    array[j] = array[j + 1];
+                    array[j + 1] = tmp;
+                    stopNestedLoop = true;
+                    stopLoop = false; //Allows for the interval timer to run in the handler function
+                    j = arrayLength+1;
+                    console.log("array: " + array)
 
-    quickSortHandler = () => {
+                }
+            }
+        }
+
+        this.update(array);
+        return stopLoop;
+    }
+    //Bubble sort method
+    bubbleSortHandler = () => {
+        let parent = this;
+        let array = this.state.data;
+        let timer = setInterval(function () {
+            if (parent.bubbleSortTable(array) === true) {
+                clearInterval(timer)
+            }
+
+        }, 100);
+
+        return array;
+    };
+
+    quickSortHandler = () =>{
 
         let parent = this;
         let array = this.state.data;
         let timer = setInterval(function () {
-            if (parent.quickSort(array) === false) {
-                parent.bubbleSortTable(array)
-            } else {
+            if (parent.quickSort(array, 0, (parent.state.data.length)-1) === true) {
                 clearInterval(timer)
             }
-        }, 50);
 
-        this.setState({data: this.quickSort(this.state.data)});
+        }, 100);
+
+
+        //this.setState({data: this.quickSort(this.state.data, 0, (this.state.data.length)-1)})
     }
 
+    quickSort = (array, left, right) =>{
 
-    quickSort(startArray) {
-        if (startArray.length <= 1) {
-            return startArray;
-        } else {
-            var leftArray = [];
-            var rightArray = [];
-            var newArray = [];
-            var partitionPoint = startArray.pop(); //Start at the end of the array
-            var arrLength = startArray.length; //gets a fixed length value as it will change
-
-            for (var i = 0; i < arrLength; i++) {
-
-                if (startArray[i] <= partitionPoint) {
-                    leftArray.push(startArray[i]);
-                } else {
-                    rightArray.push(startArray[i]);
-
-                }
-
-                var updateVar =[]
-                this.update(updateVar.concat(leftArray, partitionPoint, rightArray))
-
+        var index;
+        let stopLoop = true;
+        if (array.length > 1) {
+            index = this.partition(array, left, right); //index returned from partition
+            if (left < index - 1) { //more elements on the left side of the pivot
+                array = this.quickSort(array, left, index - 1);
+                stopLoop = false;
+                console.log("array: " + array)
             }
-            return newArray.concat(this.quickSort(leftArray), partitionPoint, this.quickSort(rightArray));
+            if (index < right) { //more elements on the right side of the pivot
+                array = this.quickSort(array, index, right);
+                stopLoop = false;
+            }
+
+            this.update(array);
         }
+        return stopLoop;
     }
+
+    partition = (array, left, right) =>{
+        var pivot = array[Math.floor((right + left) / 2)], //middle element
+            i = left, //left pointer
+            j = right; //right pointer
+        while (i <= j) {
+            while (array[i] < pivot) {
+                i++;
+            }
+            while (array[j] > pivot) {
+                j--;
+            }
+            if (i <= j) {
+                array = this.swap(array, i, j); //sawpping two elements
+
+
+                this.update(array);
+
+
+                i++;
+                j--;
+            }
+        }
+        return i;
+    }
+
+    swap = (array, left, right) =>{
+        var temp = array[left];
+        array[left] = array[right];
+        array[right] = temp;
+        return array;
+    }
+
+
 
 
     mergeSortHandler = () =>{
+
         this.setState({data: this.mergeSort(this.state.data)})
         console.log("arr: " + this.mergeSort(this.state.data))
+
     }
 
     mergeSort(arr){
         var len = arr.length;
         if(len <2)
             return arr;
-        var mid = Math.floor(len/2),
-            left = arr.slice(0,mid),
-            right =arr.slice(mid);
+        var mid = Math.floor(len/2);
+        var left = arr.slice(0,mid);
+        var right =arr.slice(mid);
         //send left and right to the mergeSort to broke it down into pieces
         //then merge those
         return this.merge(this.mergeSort(left),this.mergeSort(right));
@@ -148,10 +213,6 @@ export default class Visualiser extends React.Component{
 
 
 
-
-
-
-
     update(array) {
         this.setState(state => ({
             date: array
@@ -165,55 +226,8 @@ export default class Visualiser extends React.Component{
     }
 
 
-    bubbleSortTable(array) {
-        console.log("func called")
-        let stopLoop = true;
-        let stopNestedLoop = false;
-        let arrayLength = array.length; //Gets a fixed variable of array length
-        for (let i = 0; i < arrayLength; i++) {
-            for (let j = 0; j < arrayLength; j++) { //Inner for loop to loop over
-                if (array[j] > array[j + 1] && stopNestedLoop === false) {
-                    let tmp = array[j];
-                    array[j] = array[j + 1];
-                    array[j + 1] = tmp;
-                    stopNestedLoop = true;
-                    stopLoop = false; //Allows for the interval timer to run in the handler function
-                    //this.setState({data: array});
-                    j = arrayLength+1;
-                    console.log("array: " + array)
 
-                    //drawArray(array);
-//ReactDOM.unmountComponentAtNode(parent)
-                    //ReactDOM.render(document.getElementById('barArea'), this.dataToBars());
 
-                }
-            }
-        }
-
-        this.update(array);
-        console.log("func ended")
-
-        return stopLoop;
-    }
-    //Bubble sort method
-    bubbleSortHandler = () => {
-        let parent = this;
-        let array = this.state.data;
-        let timer = setInterval(function () {
-            if (parent.bubbleSortTable(array) === true) {
-                clearInterval(timer)
-            }
-
-        }, 100);
-
-        return array;
-    };
-
-    componentDidCatch(error, errorInfo) {
-        // You can also log the error to an error reporting service
-       // logErrorToMyService(error, errorInfo);
-        console.log("error");
-    }
 
     render() {
 
