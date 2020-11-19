@@ -94,60 +94,105 @@ export default class Visualiser extends React.Component{
         return array;
     };
 
-    quickSortHandler = () =>{
-
+    insertionSortHandler = () =>{
+        let steps = [];
         let parent = this;
+        steps = parent.insertionSort(steps);
+        for (let i = 0; i < steps.length; i++){
+            setTimeout(()=>(parent.update(steps[i]), console.log(steps[i])), 100*i);
+        }
+
+    }
+
+
+
+    insertionSort = (steps) => {
+        let n = this.state.data.length;
         let array = this.state.data;
+        for (let i = 1; i < n; i++) {
+            // Choosing the first element in our unsorted subarray
+            let current = this.state.data[i];
+            // The last element of our sorted subarray
+            let j = i-1;
+            let temp = this.state.data;
+            while ((j > -1) && (current < this.state.data[j])) {
+                temp[j+1] = temp[j];
+                j--;
+            }
+            temp[j+1] = current;
+            steps.push([...array]);
+        }
+        return steps;
+    }
+
+
+    quickSortSteps = [];
+
+    quickSort = (array, left, right) =>{
+        var index;
+        if (array.length > 1) {
+            index = this.partition(array, left, right); //index returned from partition
+            if (left < index - 1) { //more elements on the left side of the pivot
+                this.quickSort(array, left, index - 1);
+            }
+            if (index < right) { //more elements on the right side of the pivot
+                this.quickSort(array, index, right);
+            }
+        }
+        return array;
+    }
+
+    updateGraph = (stepsIndex) => {
+        this.update(this.quickSortSteps[stepsIndex]);
+    }
+
+    quickSortHandler = () =>{
+        let parent = this;
+        let array = [...this.state.data];
+        let stepsIndex = 0;
+
+        parent.quickSort(array, 0, (parent.state.data.length)-1);
+
         let timer = setInterval(function () {
-            if (parent.quickSort(array, 0, (parent.state.data.length)-1) === true) {
+            parent.updateGraph(stepsIndex);
+            stepsIndex = stepsIndex + 1;
+            if (stepsIndex > parent.quickSortSteps.length - 1) {
                 clearInterval(timer)
             }
 
         }, 100);
 
-
-        //this.setState({data: this.quickSort(this.state.data, 0, (this.state.data.length)-1)})
+        return array;
     }
 
-    quickSort = (array, left, right) =>{
 
-        var index;
-        let stopLoop = true;
-        if (array.length > 1) {
-            index = this.partition(array, left, right); //index returned from partition
-            if (left < index - 1) { //more elements on the left side of the pivot
-                array = this.quickSort(array, left, index - 1);
-                stopLoop = false;
-                console.log("array: " + array)
-            }
-            if (index < right) { //more elements on the right side of the pivot
-                array = this.quickSort(array, index, right);
-                stopLoop = false;
-            }
-
-            this.update(array);
-        }
-        return stopLoop;
+    update(array) {
+        console.log("UPDATING GRAPH")
+        console.log(array)
+        this.setState(state => ({
+            data: array
+        }));
+    }
+    swap(items, leftIndex, rightIndex){
+        var temp = items[leftIndex];
+        items[leftIndex] = items[rightIndex];
+        items[rightIndex] = temp;
+        this.quickSortSteps.push([...items]);
     }
 
-    partition = (array, left, right) =>{
-        var pivot = array[Math.floor((right + left) / 2)], //middle element
-            i = left, //left pointer
-            j = right; //right pointer
+    partition(items, left, right) {
+        var pivot   = items[Math.floor((right + left) / 2)], //middle element
+            i       = left, //left pointer
+            j       = right; //right pointer
         while (i <= j) {
-            while (array[i] < pivot) {
+            while (items[i] < pivot) {
                 i++;
             }
-            while (array[j] > pivot) {
+            while (items[j] > pivot) {
                 j--;
             }
             if (i <= j) {
-                array = this.swap(array, i, j); //sawpping two elements
-
-
-                this.update(array);
-
-
+                this.swap(items, i, j); //sawpping two elements
                 i++;
                 j--;
             }
@@ -155,12 +200,6 @@ export default class Visualiser extends React.Component{
         return i;
     }
 
-    swap = (array, left, right) =>{
-        var temp = array[left];
-        array[left] = array[right];
-        array[right] = temp;
-        return array;
-    }
 
 
 
@@ -181,6 +220,7 @@ export default class Visualiser extends React.Component{
         var right =arr.slice(mid);
         //send left and right to the mergeSort to broke it down into pieces
         //then merge those
+        this.update (this.merge(this.mergeSort(left),this.mergeSort(right)));
         return this.merge(this.mergeSort(left),this.mergeSort(right));
     }
 
@@ -202,6 +242,10 @@ export default class Visualiser extends React.Component{
         return result.concat(left.slice(l)).concat(right.slice(r));
     }
 
+    // sleep time expects milliseconds
+   sleep (time) {
+        return new Promise((resolve) => setTimeout(resolve, time));
+    }
 
     sleep(duration) {
         return new Promise(resolve => {
@@ -212,10 +256,10 @@ export default class Visualiser extends React.Component{
     }
 
 
-
     update(array) {
+
         this.setState(state => ({
-            date: array
+            data: array
         }));
     }
 
@@ -241,6 +285,7 @@ export default class Visualiser extends React.Component{
                 <button onClick={this.mergeSortHandler}>Merge Sort</button>
                 <button onClick={this.bubbleSortHandler}>Bubble Sort</button>
                 <button onClick={this.quickSortHandler}>Quick Sort</button>
+                <button onClick={this.insertionSortHandler}>Insertion Sort</button>
 
 
                 <p>
@@ -264,3 +309,4 @@ export default class Visualiser extends React.Component{
 
 
 }
+
