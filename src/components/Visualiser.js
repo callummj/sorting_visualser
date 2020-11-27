@@ -146,7 +146,7 @@ export default class Visualiser extends React.Component{
         let steps = [];
         let parent = this;
         //steps = parent.insertionSort(steps);
-        console.log("insertionsort data: " + this.state.insertionSortData)
+
         steps = Insertionsort(this.state.insertionSortData);
         for (let i = 0; i < steps.length; i++){
             setTimeout(()=>(parent.update(steps[i], "insertionSort"), console.log(steps[i])), 100*i);
@@ -158,13 +158,13 @@ export default class Visualiser extends React.Component{
         this.addAlgorithm("bubbleSort")
         let steps = [];
         let parent = this;
-        console.log("here")
+
         steps = Bubblesort(this.state.bubbleSortData);
-        console.log("here2")
+
         for (let i = 0; i < steps.length; i++){
             setTimeout(()=>(parent.update(steps[i], "bubbleSort"), console.log(steps[i])), 100*i);
         }
-        console.log("here4")
+
     }
     /*
         mergeSortHandler = () =>{
@@ -277,24 +277,21 @@ export default class Visualiser extends React.Component{
             result.push(algorithm)
             this.setState({algorithms: result});
 
-            let data = this.state.data;
-            console.log("state data: " + this.state.data)
-            console.log("data copy: " + data)
+            let data = [...this.state.data];
+
             switch (algorithm){
                 case "quickSort":
-                    this.setState({quickSortData: this.state.data});
+                    this.setState({quickSortData: data});
                     break;
                 case "bubbleSort":
-                    this.setState({bubbleSortData: this.state.data});
+                    this.setState({bubbleSortData: data});
                     break;
                 case "insertionSort":
-                    console.log("insertion sort detected")
-                    console.log("data2: " + data)
+
                     this.setState({insertionSortData: data});
-                    console.log("data: " + this.state.insertionSortData)
                     break;
                 case "mergeSort":
-                    this.setState({mergeSortData: this.state.data});
+                    this.setState({mergeSortData: data});
                     break;
                 default:
                     break;
