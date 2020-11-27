@@ -1,8 +1,38 @@
 import React from "react";
 import './Toolbar.css';
 import Visualiser from "./Visualiser";
-import  "./Visualiser";
 
+
+
+
+function Toolbar(props){
+
+
+
+    return(
+        <div>
+            <nav className="Toolbar">
+                <button onClick={handleGenerateButton.bind(this)}>Generate New Data</button>
+                <button onClick={sortDataAction}>Sort</button>
+            </nav>
+
+            <Visualiser/>
+        </div>
+
+    );
+}export default Toolbar;
+
+
+function handleGenerateButton(){
+
+    this.refs.child.generateData();
+
+
+
+}
+
+function sortDataAction(){}
+/*
 
 export default class Toolbar extends React.Component {
 
@@ -28,12 +58,9 @@ export default class Toolbar extends React.Component {
                     <button onClick={this.handleGenerateButton.bind(this)}>Generate New Data</button>
                     <button onClick={this.sortDataAction}>Sort</button>
                 </nav>
-                <div id={'visualiserArea'}>
-                    <Visualiser/>
-                </div>
             </div>
 
         );
     }
-}
+}*/
 
