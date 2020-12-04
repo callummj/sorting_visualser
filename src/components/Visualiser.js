@@ -20,6 +20,7 @@ export default class Visualiser extends React.Component{
     constructor (props){
         super(props);
 
+
         this.state = {
             data: [], //initialises data state
             algorithms: [],
@@ -27,11 +28,28 @@ export default class Visualiser extends React.Component{
             quickSortData: [],
             bubbleSortData: [],
             mergeSortData: [],
+            generateData: false,
+            startSort: false,
         }
 
+        this.startSort.bind(this);
+        this.generateDataHandler.bind(this);
+    }
+
+    generateDataHandler(){
+        console.log("generate data clicked");
+        this.generateData()
+    }
+
+
+    startSort(){
+        this.setState({
+            startSort: true,
+        })
     }
 
     componentDidMount() {
+
         this.generateData();
 
     }
@@ -53,7 +71,7 @@ export default class Visualiser extends React.Component{
             quickSortData: [],
             bubbleSortData: [],
             mergeSortData: [],
-
+            sort: false,
         });
 
 
@@ -61,6 +79,9 @@ export default class Visualiser extends React.Component{
 
 
 
+    startSort(){
+        console.log("startSort!")
+    }
 
     //Creates a bar representing each piece of data in the array, using CSS capsulated in a <div>
     dataToBars = (algorithm) => {
@@ -309,7 +330,15 @@ export default class Visualiser extends React.Component{
         );
     }
 
+/*
+    callBackFunc(){
+        this.generateData();
+    }
+*/
     render() {
+
+
+        //have no brackets to pass a reference to the function: brackets mean that the
 
         //Renders a test generate button, and displays the data generated above.
         //TODO Make the generate button in the Toolbar work.
@@ -317,6 +346,10 @@ export default class Visualiser extends React.Component{
         return(
             <div>
 
+
+                <div>
+                    <Toolbar buttonCallBack = {this.generateData}/>
+                </div>
 
                 <button onClick={this.generateData}>Generate New Data</button>
                 <button onClick={this.mergeSortHandler}>Merge Sort</button>
@@ -352,3 +385,5 @@ export default class Visualiser extends React.Component{
 
 }
 
+//TODO callback functions
+//callback is a function passed as param
