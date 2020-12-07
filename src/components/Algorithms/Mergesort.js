@@ -1,54 +1,59 @@
-import React from "react";
 
-//pass resultt into
+
 
 
 let steps;
-let fullArray;
-let atomicArray;
-
 
 function MergeSortDriver(data) {
     console.log("here")
     steps = [];
-    atomicArray = [];
-    mergeSort(data);
+    mergesort(data, 0, data.length);
+    for (let i = 0 ; i < steps.length; i++){
+        console.log(i);
+    }
     return steps;
 
 }
+function merge(a, lo, m, hi) {
+    var tmp = [];
+    var len = m - lo;
+    var i, j, k;
+    // save left subarray
+    for (i = 0; i < len; i++) {
+        // animate this move
+        tmp[i] = a[lo + i];
+        steps.push([...a]);
+    }
+    // merge subarrays
+    i = 0;
+    j = m;
+    k = lo;
+    while (i < len && j < hi) {
+        if (tmp[i] <= a[j]) {
+            // animate this move
 
-function merge(left, right) {
-    let arr = []
-    // Break out of loop if any one of the array gets empty
-    while (left.length && right.length) {
-        // Pick the smaller among the smallest element of left and right sub arrays
-        if (left[0] < right[0]) {
-            arr.push(left.shift())
+            a[k++] = tmp[i++];
         } else {
-            arr.push(right.shift())
-        }
-        atomicArray.push(arr);
+            // animate this move
+            a[k++] = a[j++];
+        }steps.push([...a]);
     }
-    steps.push(atomicArray);
-
-    // Concatenating the leftover elements
-    // (in case we didn't go through the entire left or right array)
-    //steps.push([ ...arr, ...left, ...right ]);
-    return [ ...arr, ...left, ...right ]
+    // copy the remaining elements
+    while (i < len) {
+        // animate this move
+        a[k++] = tmp[i++];
+        steps.push([...a]);
+    }
 }
 
-function mergeSort(array) {
-    const half = array.length / 2
-
-    // Base case or terminating case
-    if(array.length < 2){
-        return array
+function mergesort(a, lo, hi) {
+    if (hi - lo > 1) {
+        var m = lo + ((hi - lo) >> 1);
+        mergesort(a, lo, m);
+        mergesort(a, m, hi);
+        merge(a, lo, m, hi);
     }
-
-
-    const left = array.splice(0, half)
-
-    return merge(mergeSort(left),mergeSort(array))
 }
+
 
 export default MergeSortDriver

@@ -29,3 +29,13 @@ p{
     background: red;
 }
 
+.close-button{
+    background-color: red;
+    border-radius: 25%;
+    padding: 1px;
+    text-decoration: none;
+    border: none;
+    width: 20px;
+    float: right;
+    color: white;
+}

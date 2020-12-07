@@ -2,18 +2,23 @@ import React from "react";
 
 
 import Toolbar from "./Toolbar";
+import Controller from "./Controller";
 
 import './Visualiser.css';
 
 import Bubblesort from "./algorithms/Bubblesort";
 import Insertionsort from "./algorithms/Insertionsort";
 import Quicksort from "./algorithms/Quicksort";
-
+import Selectionsort from "./algorithms/Selectionsort"
 
 import ReactDOM from "react-dom";
 import App from "../App";
 import MergeSortDriver from "./algorithms/Mergesort";
 
+
+
+//CONVENTION:
+//ALGORITHM: Merge Sort, Insertion Sort, Bubble Sort => Capital for each word and space between
 export default class Visualiser extends React.Component{
 
     //Initialises Data
@@ -28,6 +33,7 @@ export default class Visualiser extends React.Component{
             quickSortData: [],
             bubbleSortData: [],
             mergeSortData: [],
+            selectionSortData: [],
             generateData: false,
             startSort: false,
         }
@@ -71,6 +77,7 @@ export default class Visualiser extends React.Component{
             quickSortData: [],
             bubbleSortData: [],
             mergeSortData: [],
+            selectionSortData: [],
             sort: false,
         });
 
@@ -78,6 +85,18 @@ export default class Visualiser extends React.Component{
     }
 
 
+    removeAlgorithm(algorithmToRemove){
+        let algorithms = this.state.algorithms;
+        let newAlgorithms = []; //new list without the algorithm to be removed
+        for (let i in algorithms){
+            if (algorithms[i] != algorithmToRemove){
+                newAlgorithms.push(algorithms[i]);
+            }
+        }
+        console.log("new algs: " + newAlgorithms)
+        this.setState({algorithms: newAlgorithms})
+        console.log("algs state: " + this.state.algorithms)
+    }
 
     startSort(){
         console.log("startSort!")
@@ -87,58 +106,113 @@ export default class Visualiser extends React.Component{
     dataToBars = (algorithm) => {
 
         console.log("algorithm:" + algorithm)
+
         switch (algorithm){
-            case "quickSort":
-                return( <div id = "quicksort-bars">
-                    {
-                        this.state.quickSortData.map(i => (
-                            <div key = {Math.random() * 100} className="arraybar"  style={{
-                                height: `${i}px`,
-                            }}/>
-                        ))}
-                </div>)
+            case "Quick Sort":
+                return(
+                    <div>
+                        <div>
+                            <button className={"close-button"} onClick={()=>this.removeAlgorithm("Quick Sort")}>x</button>
+
+                        <h2>{algorithm}</h2>
+                        <div id = "quicksort-bars">
+                        {
+                            this.state.quickSortData.map(i => (
+                                <div key = {Math.random() * 100} className="arraybar"  style={{
+                                    height: `${i}px`,
+                                }}/>
+                            ))}
+                        </div></div>
+                    </div>)
 
                 break;
-            case "bubbleSort":
-                return( <div id = "bubblesort-bars">
-                    {
-                        this.state.bubbleSortData.map(i => (
-                            <div key = {Math.random() * 100} className="arraybar"  style={{
-                                height: `${i}px`,
-                            }}/>
-                        ))}
-                </div>)
-                break;
-            case "insertionSort":
+            case "Bubble Sort":
+                return(
+                    <div>
+                        <div>
 
-                return( <div id = "insertionsort-bars">
+                            <button className={"close-button"} onClick={()=>this.removeAlgorithm("Bubble Sort")}>x</button>
+                        <h2>{algorithm}</h2>
+
+                        <div id = "bubblesort-bars">
+                            {
+                                this.state.bubbleSortData.map(i => (
+                                    <div key = {Math.random() * 100} className="arraybar"  style={{
+                                        height: `${i}px`,
+                                    }}/>
+                                ))}
+                        </div>
+                        </div>
+                    </div>)
+                break;
+            case "Insertion Sort":
+
+                return(
+                    <div>
+                        <div>
+                            <button className={"close-button"} onClick={()=>this.removeAlgorithm("Insertion Sort")}>x</button>
+
+                      <h2>{algorithm}</h2>
+
+                    <div id = "insertionsort-bars">
                     {
                         this.state.insertionSortData.map(i => (
                             <div key = {Math.random() * 100} className="arraybar"  style={{
                                 height: `${i}px`,
                             }}/>
                         ))}
-                </div>)
+                </div></div></div>)
                 break;
-            case "mergeSort":
-                return( <div id = "bars">
+            case "Merge Sort":
+                return(
+                    <div>
+                        <button className={"close-button"} onClick={()=>this.removeAlgorithm("Merge Sort")}>x</button>
+
+                    <div>
+                        <h2>{algorithm}</h2>
+
+                    <div id = "bars">
                     {
+
                         this.state.mergeSortData.map(i => (
                             <div key = {Math.random() * 100} className="arraybar"  style={{
                                 height: `${i}px`,
                             }}/>
                         ))}
-                </div>)
+                </div></div></div>)
+                break;
+            case "Selection Sort":
+                return(
+                    <div>
+
+                        <button className={"close-button"} onClick={()=>this.removeAlgorithm("Selection Sort")}>x</button>
+                    <div>
+                        <h2>{algorithm}</h2>
+
+                    <div id = "bars">
+                    {
+                        this.state.selectionSortData.map(i => (
+                            <div key = {Math.random() * 100} className="arraybar"  style={{
+                                height: `${i}px`,
+                            }}/>
+                        ))}
+                </div>
+                    </div></div>)
                 break;
             default:
-                return( <div id = "bars">
+                return(
+                    <div>
+                        <h2>{algorithm}</h2>
+
+                    <div id = "bars">
                     {
                         this.state.data.map(i => (
                             <div key = {Math.random() * 100} className="arraybar"  style={{
                                 height: `${i}px`,
                             }}/>
                         ))}
-                </div>)
+                </div>
+                    </div>)
                 break;
         }
 
@@ -150,12 +224,12 @@ export default class Visualiser extends React.Component{
 
     quickSortHandler = () =>{
 
-        this.addAlgorithm("quickSort");
+        this.addAlgorithm("Quick Sort");
         let parent = this;
         let steps = Quicksort ((this.state.quickSortData), 0, (this.state.quickSortData.length-1));
 
         for (let i = 0; i < steps.length; i++){
-            setTimeout(()=>(this.update(steps[i], "quickSort"), console.log(steps[i])), 100*i);
+            setTimeout(()=>(this.update(steps[i], "Quick Sort"), console.log(steps[i])), 100*i);
         }
 
 
@@ -163,27 +237,27 @@ export default class Visualiser extends React.Component{
 
 
     insertionSortHandler = () =>{
-        this.addAlgorithm("insertionSort")
+        this.addAlgorithm("Insertion Sort")
         let steps = [];
         let parent = this;
         //steps = parent.insertionSort(steps);
 
         steps = Insertionsort(this.state.insertionSortData);
         for (let i = 0; i < steps.length; i++){
-            setTimeout(()=>(parent.update(steps[i], "insertionSort"), console.log(steps[i])), 100*i);
+            setTimeout(()=>(parent.update(steps[i], "Insertion Sort"), console.log(steps[i])), 100*i);
         }
 
     }
 
     bubbleSortHandler = () =>{
-        this.addAlgorithm("bubbleSort")
+        this.addAlgorithm("Bubble Sort")
         let steps = [];
         let parent = this;
 
         steps = Bubblesort(this.state.bubbleSortData);
 
         for (let i = 0; i < steps.length; i++){
-            setTimeout(()=>(parent.update(steps[i], "bubbleSort"), console.log(steps[i])), 100*i);
+            setTimeout(()=>(parent.update(steps[i], "Bubble Sort"), console.log(steps[i])), 100*i);
         }
 
     }
@@ -201,13 +275,24 @@ export default class Visualiser extends React.Component{
 
 
     mergeSortHandler = () =>{
-        this.addAlgorithm("mergeSort")
+        this.addAlgorithm("Merge Sort")
         let steps = [];
         let parent = this;
         let result = [];
         steps = MergeSortDriver(this.state.mergeSortData, result);
         for (let i = 0; i < steps.length; i++){
-            setTimeout(()=>(parent.update(steps[i], "mergeSort"), console.log(steps[i])), 100*i);
+            setTimeout(()=>(parent.update(steps[i], "Merge Sort"), console.log(steps[i])), 100*i);
+        }
+    }
+
+    selectionSortHandler = () =>{
+        this.addAlgorithm("Selection Sort")
+        let steps = [];
+        let parent = this;
+        let result = [];
+        steps = Selectionsort(this.state.selectionSortData);
+        for (let i = 0; i < steps.length; i++){
+            setTimeout(()=>(parent.update(steps[i], "Selection Sort"), console.log(steps[i])), 100*i);
         }
     }
 
@@ -267,18 +352,21 @@ export default class Visualiser extends React.Component{
     update(array, algorithm){
         console.log("Algorithm recieved: " + algorithm)
         switch (algorithm) {
-            case "bubbleSort":
+            case "Bubble Sort":
                 this.setState({bubbleSortData: array})
                 break;
-            case "quickSort":
+            case "Quick Sort":
                 console.log("updating quick sort")
                 this.setState({quickSortData: array});
                 break;
-            case "insertionSort":
+            case "Insertion Sort":
                 this.setState({insertionSortData: array});
                 break;
-            case "mergeSort":
+            case "Merge Sort":
                 this.setState({mergeSortData: array});
+                break;
+            case "Selection Sort":
+                this.setState({selectionSortData: array});
                 break;
             default:
                 break;
@@ -293,6 +381,7 @@ export default class Visualiser extends React.Component{
 
 
     addAlgorithm(algorithm){
+        console.log("add algorithm: " + algorithm)
         let result = this.state.algorithms;
         if (!(result.includes(algorithm))){
             result.push(algorithm)
@@ -301,18 +390,22 @@ export default class Visualiser extends React.Component{
             let data = [...this.state.data];
 
             switch (algorithm){
-                case "quickSort":
+                case "Quick Sort":
                     this.setState({quickSortData: data});
                     break;
-                case "bubbleSort":
+                case "Bubble Sort":
                     this.setState({bubbleSortData: data});
                     break;
-                case "insertionSort":
+                case "Insertion Sort":
 
                     this.setState({insertionSortData: data});
                     break;
-                case "mergeSort":
+                case "Merge Sort":
+                    console.log("merge sort add data")
                     this.setState({mergeSortData: data});
+                    break;
+                case "Selection Sort":
+                    this.setState({selectionSortData: data});
                     break;
                 default:
                     break;
@@ -330,11 +423,11 @@ export default class Visualiser extends React.Component{
         );
     }
 
-/*
-    callBackFunc(){
-        this.generateData();
+    startSort(){
+        console.log("start sort")
+
     }
-*/
+
     render() {
 
 
@@ -348,7 +441,7 @@ export default class Visualiser extends React.Component{
 
 
                 <div>
-                    <Toolbar buttonCallBack = {this.generateData}/>
+                    <Toolbar generateDataCallback = {this.generateData} startSortCallback = {this.startSort}/>
                 </div>
 
                 <button onClick={this.generateData}>Generate New Data</button>
@@ -356,6 +449,7 @@ export default class Visualiser extends React.Component{
                 <button onClick={this.bubbleSortHandler}>Bubble Sort</button>
                 <button onClick={this.quickSortHandler}>Quick Sort</button>
                 <button onClick={this.insertionSortHandler}>Insertion Sort</button>
+                <button onClick={this.selectionSortHandler}>Selection Sort</button>
 
 
                 <p>
@@ -377,7 +471,9 @@ export default class Visualiser extends React.Component{
                 </div>
 
 
-
+                <div>
+                    <Controller/>
+                </div>
             </div>
         );
     }

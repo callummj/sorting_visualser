@@ -15,8 +15,8 @@ export default function Toolbar(props){
     return(
         <div>
             <nav className="Toolbar">
-                <button value = "generateData" onClick={props.buttonCallBack}>Generate New Data</button>
-                <button>Sort</button>
+                <button value = "generateData" onClick={props.generateDataCallback}>Generate New Data</button>
+                <button value = "startSort" onClick={props.startSortCallback}>Sort</button>
             </nav>
 
 
