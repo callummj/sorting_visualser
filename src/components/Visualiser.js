@@ -101,16 +101,17 @@ export default class Visualiser extends React.Component{
         this.generateData();
     }
 
+
+
     //Generates Data & sets the Data state to its value
     generateData = () =>{
 
+        this.stopSort();
 
         let dataTemp = [];
         for (let i = 0; i < 20; i++){
             dataTemp.push(Math.floor(Math.random() * 100)+1);
         }
-
-
 
         this.setState({
             data: dataTemp,
@@ -120,6 +121,7 @@ export default class Visualiser extends React.Component{
             bubbleSortData: [],
             mergeSortData: [],
             selectionSortData: [],
+            sort: false,
         });
 
     }
@@ -279,7 +281,7 @@ export default class Visualiser extends React.Component{
     }
 
     async visualise(steps, parent, speed){
-        console.log("visualise")
+        console.log("visualise func")
         for (let i = 0; i < steps.length; i++){
             setTimeout(()=>(this.update(steps[i], "Quick Sort"), console.log(steps[i])), speed*i);
         }
@@ -316,12 +318,17 @@ export default class Visualiser extends React.Component{
 
     mergeSortHandler = () =>{
         this.addAlgorithm("Merge Sort")
+
         let steps = [];
         let parent = this;
         let result = [];
         steps = MergeSortDriver(this.state.mergeSortData, result);
+        this.setState({sort: true})
+
         for (let i = 0; i < steps.length; i++){
-            setTimeout(()=>(parent.update(steps[i], "Merge Sort"), console.log(steps[i])), 90*i);
+            if (this.state.sort == true)
+                console.log("sort in merge ahndler: " + this.state.sort)
+                setTimeout(()=>(parent.update(steps[i], "Merge Sort"), console.log(steps[i])), 90*i);
         }
     }
 
