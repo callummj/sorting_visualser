@@ -5,6 +5,7 @@ p{
 
 /* Container for array area */
 .array-container{
+    width: 100%;
     height: 100%;
     display: flex;
     justify-content: center;
@@ -14,10 +15,12 @@ p{
 /* CSS for each array bar*/
 .arraybar {
     margin: 1px;
-    width: 20px;
+    width: 2vw;
     background: darkred;
     display: inline-block;
 }
+
+
 .arraybar:hover{
     background: red;
     transition: 0.1s;
@@ -30,7 +33,7 @@ p{
 }
 
 .close-button{
-    background-color: red;
+    background-color: #c0392b;
     border-radius: 25%;
     padding: 1px;
     text-decoration: none;
@@ -38,4 +41,8 @@ p{
     width: 20px;
     float: right;
     color: white;
+}
+
+.close-button:hover{
+    background-color: #e74c3c;
 }

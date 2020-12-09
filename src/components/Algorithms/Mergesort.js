@@ -15,13 +15,13 @@ function MergeSortDriver(data) {
 
 }
 function merge(a, lo, m, hi) {
-    var tmp = [];
+    var temp = [];
     var len = m - lo;
     var i, j, k;
     // save left subarray
     for (i = 0; i < len; i++) {
         // animate this move
-        tmp[i] = a[lo + i];
+        temp[i] = a[lo + i];
         steps.push([...a]);
     }
     // merge subarrays
@@ -29,10 +29,10 @@ function merge(a, lo, m, hi) {
     j = m;
     k = lo;
     while (i < len && j < hi) {
-        if (tmp[i] <= a[j]) {
+        if (temp[i] <= a[j]) {
             // animate this move
 
-            a[k++] = tmp[i++];
+            a[k++] = temp[i++];
         } else {
             // animate this move
             a[k++] = a[j++];
@@ -41,7 +41,7 @@ function merge(a, lo, m, hi) {
     // copy the remaining elements
     while (i < len) {
         // animate this move
-        a[k++] = tmp[i++];
+        a[k++] = temp[i++];
         steps.push([...a]);
     }
 }
