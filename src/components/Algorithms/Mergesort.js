@@ -14,10 +14,10 @@ function MergeSortDriver(data) {
     return steps;
 
 }
-function merge(a, lo, m, hi) {
+function merge(a, lo, middle, hi) {
     var temp = [];
-    var len = m - lo;
-    var i, j, k;
+    var len = middle - lo;
+    var i, tempMiddle, tempLow;
     // save left subarray
     for (i = 0; i < len; i++) {
         // animate this move
@@ -26,34 +26,40 @@ function merge(a, lo, m, hi) {
     }
     // merge subarrays
     i = 0;
-    j = m;
-    k = lo;
-    while (i < len && j < hi) {
-        if (temp[i] <= a[j]) {
+    tempMiddle = middle;
+    tempLow = lo;
+    while (i < len && tempMiddle < hi) {
+        if (temp[i] <= a[tempMiddle]) {
             // animate this move
 
-            a[k++] = temp[i++];
+            a[tempLow++] = temp[i++];
         } else {
             // animate this move
-            a[k++] = a[j++];
+            a[tempLow++] = a[tempMiddle++];
         }steps.push([...a]);
     }
     // copy the remaining elements
     while (i < len) {
         // animate this move
-        a[k++] = temp[i++];
+        a[tempLow++] = temp[i++];
         steps.push([...a]);
     }
 }
 
-function mergesort(a, lo, hi) {
+
+function mergesort(array, lo, hi) {
     if (hi - lo > 1) {
-        var m = lo + ((hi - lo) >> 1);
-        mergesort(a, lo, m);
-        mergesort(a, m, hi);
-        merge(a, lo, m, hi);
+        var middle = lo + ((hi - lo) >> 1);
+        mergesort(array, lo, middle);
+        mergesort(array, middle, hi);
+        merge(array, lo, middle, hi);
     }
 }
 
 
 export default MergeSortDriver
+
+
+//https://www.geeksforgeeks.org/merge-sort/
+
+//https://stackoverflow.com/questions/61845367/how-do-i-animate-draw-a-merge-sort-visualization

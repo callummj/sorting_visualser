@@ -35,11 +35,9 @@ export default class Visualiser extends React.Component{
             mergeSortData: [],
             selectionSortData: [],
             generateData: false,
-            sort: false,
+            speed:  50,
         }
 
-
-        console.log("poo start sort: " + this.state.sort)
 
 
         this.generateDataHandler.bind(this);
@@ -48,52 +46,6 @@ export default class Visualiser extends React.Component{
     generateDataHandler(){
         console.log("generate data clicked");
         this.generateData()
-    }
-
-    stopSort(){
-        this.setState({
-            sort: false,
-        })
-    }
-
-    //TODO start sort funciton: merge sort not working properly and quick sort has to press button twice
-    startSort(){
-
-
-        this.setState({
-            sort: true,
-        })
-
-        console.log("sort: " + this.state.sort)
-
-
-        if (this.state.sort){
-            for (let i in this.state.algorithms){
-
-                let steps = [];
-                switch (this.state.algorithms[i]) {
-                    case "Quick Sort":
-                        steps = Quicksort ((this.state.quickSortData), 0, (this.state.quickSortData.length-1));
-                        this.visualise(steps, this.getParent(), 100);
-                        break;
-                    case "Merge Sort":
-
-                        let result = [];
-                        steps = MergeSortDriver(this.state.mergeSortData, result);
-                        this.visualise(steps, this.getParent(), 90);
-                        break;
-
-                    default:
-                        console.log("i: " + this.state.algorithms[i])
-                }
-
-        }
-
-
-            /*
-
-            }*/
-        }
     }
 
     componentDidMount() {
@@ -145,7 +97,6 @@ export default class Visualiser extends React.Component{
     //Creates a bar representing each piece of data in the array, using CSS capsulated in a <div>
     dataToBars = (algorithm) => {
 
-        console.log("algorithm:" + algorithm)
 
         switch (algorithm){
             case "Quick Sort":
@@ -205,13 +156,13 @@ export default class Visualiser extends React.Component{
                 break;
             case "Merge Sort":
                 return(
-                    <div className={"Quick-Sort-Area"}>
+                    <div className={"Merge-Sort-Area"}>
 
 
                     <div> <button className={"close-button"} onClick={()=>this.removeAlgorithm("Merge Sort")}>x</button>
                         <h2>{algorithm}</h2>
 
-                    <div id = "bars">
+                    <div id = "mergesort-bars">
                     {
 
                         this.state.mergeSortData.map(i => (
@@ -229,7 +180,7 @@ export default class Visualiser extends React.Component{
                     <div><button className={"close-button"} onClick={()=>this.removeAlgorithm("Selection Sort")}>x</button>
                         <h2>{algorithm}</h2>
 
-                    <div id = "bars">
+                    <div id = "quicksort-bars">
                     {
                         this.state.selectionSortData.map(i => (
                             <div key = {Math.random() * 100} className="arraybar"  style={{
@@ -262,18 +213,6 @@ export default class Visualiser extends React.Component{
 
 
 
-    quickSortHandler = () =>{
-
-        this.addAlgorithm("Quick Sort");
-        let parent = this;
-        let steps = Quicksort ((this.state.quickSortData), 0, (this.state.quickSortData.length-1));
-
-        for (let i = 0; i < steps.length; i++){
-            setTimeout(()=>(this.update(steps[i], "Quick Sort"), console.log(steps[i])), 100*i);
-        }
-
-
-    }
 
 
     getParent = () =>{
@@ -288,59 +227,72 @@ export default class Visualiser extends React.Component{
     }
 
 
-    insertionSortHandler = () =>{
-        this.addAlgorithm("Insertion Sort")
+    quickSortGetSteps = () =>{
+        let parent = this;
+        let steps = Quicksort ((this.state.quickSortData), 0, (this.state.quickSortData.length-1));
+
+        return steps;
+        /*
+        for (let i = 0; i < steps.length; i++){
+            setTimeout(()=>(this.update(steps[i], "Quick Sort"), console.log(steps[i])), 100*i);
+        }*/
+    }
+    insertionSortGetSteps = () =>{
+
         let steps = [];
         let parent = this;
         //steps = parent.insertionSort(steps);
 
         steps = Insertionsort(this.state.insertionSortData);
+        return steps;
+        /*
         for (let i = 0; i < steps.length; i++){
             setTimeout(()=>(parent.update(steps[i], "Insertion Sort"), console.log(steps[i])), 100*i);
-        }
+        }*/
 
     }
 
-    bubbleSortHandler = () =>{
-        this.addAlgorithm("Bubble Sort")
+    bubbleSortGetSteps = () =>{
         let steps = [];
         let parent = this;
 
         steps = Bubblesort(this.state.bubbleSortData);
 
+        return steps;
+        /*
         for (let i = 0; i < steps.length; i++){
             setTimeout(()=>(parent.update(steps[i], "Bubble Sort"), console.log(steps[i])), 100*i);
-        }
+        }*/
 
     }
 
 
 
-    mergeSortHandler = () =>{
-        this.addAlgorithm("Merge Sort")
-
+    mergeSortGetSteps = () =>{
         let steps = [];
         let parent = this;
         let result = [];
         steps = MergeSortDriver(this.state.mergeSortData, result);
-        this.setState({sort: true})
-
+        return steps;
+        /*
         for (let i = 0; i < steps.length; i++){
             if (this.state.sort == true)
                 console.log("sort in merge ahndler: " + this.state.sort)
                 setTimeout(()=>(parent.update(steps[i], "Merge Sort"), console.log(steps[i])), 90*i);
-        }
+        }*/
     }
 
-    selectionSortHandler = () =>{
-        this.addAlgorithm("Selection Sort")
+    selectionSortGetSteps = () =>{
+
         let steps = [];
         let parent = this;
         let result = [];
         steps = Selectionsort(this.state.selectionSortData);
+        return steps;
+        /*
         for (let i = 0; i < steps.length; i++){
             setTimeout(()=>(parent.update(steps[i], "Selection Sort"), console.log(steps[i])), 100*i);
-        }
+        }*/
     }
 
 
@@ -398,7 +350,7 @@ export default class Visualiser extends React.Component{
                     this.setState({insertionSortData: data});
                     break;
                 case "Merge Sort":
-                    console.log("merge sort add data")
+
                     this.setState({mergeSortData: data});
                     break;
                 case "Selection Sort":
@@ -420,6 +372,71 @@ export default class Visualiser extends React.Component{
         );
     }
 
+
+
+
+
+    //Creates a map of each algorithm and their steps ready for animation
+    startSort(){
+        const algsStepsMap = new Map();
+        for (let i in this.state.algorithms){
+            let steps = [];
+            switch (this.state.algorithms[i]) {
+                case "Merge Sort":
+                    steps = this.mergeSortGetSteps();
+                    algsStepsMap.set('Merge Sort', steps);
+                    break;
+                case "Bubble Sort":
+                    steps = this.bubbleSortGetSteps();
+                    algsStepsMap.set('Bubble Sort', steps);
+                    break;
+                case "Insertion Sort":
+                    steps = this.insertionSortGetSteps();
+                    algsStepsMap.set('Insertion Sort', steps);
+                    break;
+                case "Quick Sort":
+                    steps = this.quickSortGetSteps();
+                    algsStepsMap.set('Quick Sort', steps);
+                    break;
+                case "Selection Sort":
+                    steps = this.selectionSortGetSteps();
+                    algsStepsMap.set('Selection Sort', steps);
+                    break;
+                default:
+                    break;
+            }
+            this.animate(this.state.algorithms[i], steps);
+        }
+        //this.animate(algsStepsMap);
+    }
+
+    animate(algorithm, steps){
+        for (let i = 0; i < steps.length; i++){
+            console.log("animate speed: " + this.state.speed)
+            setTimeout(()=>(this.update(steps[i], algorithm), console.log(steps[i])), this.state.speed*i);
+        }
+    }
+
+
+    stopSort(){}
+
+
+    //Updates speed from the controller component
+    updateSpeed = (speed) => {
+
+        //flip value as speed used for timeout so 20 is faster than 80 but this doesn't make sense linguistically
+        if (speed>50){
+            let toSubtract = speed - 50;
+            speed = 50 - toSubtract;
+        }else if (speed < 50){
+            let toAdd = 50 - speed;
+            speed = 50 + toAdd;
+        }
+
+        console.log("speed: " + speed*100);
+        this.setState({speed: speed*2})
+    }
+
     render() {
 
 
@@ -433,15 +450,15 @@ export default class Visualiser extends React.Component{
 
 
                 <div>
-                    <Toolbar generateDataCallback = {this.generateData} startSortCallback = {this.startSort}/>
+                    <Toolbar generateDataCallback = {this.generateData} startSortCallback = {this.startSort.bind(this)}/>
                 </div>
 
                 <button onClick={this.generateData}>Generate New Data</button>
-                <button onClick={this.mergeSortHandler}>Merge Sort</button>
-                <button onClick={this.bubbleSortHandler}>Bubble Sort</button>
-                <button onClick={this.quickSortHandler}>Quick Sort</button>
-                <button onClick={this.insertionSortHandler}>Insertion Sort</button>
-                <button onClick={this.selectionSortHandler}>Selection Sort</button>
+                <button onClick={() => this.addAlgorithm("Merge Sort")}>Merge Sort</button>
+                <button onClick={() => this.addAlgorithm("Bubble Sort")}>Bubble Sort</button>
+                <button onClick={() => this.addAlgorithm("Quick Sort")}>Quick Sort</button>
+                <button onClick={() => this.addAlgorithm("Insertion Sort")}>Insertion Sort</button>
+                <button onClick={() => this.addAlgorithm("Selection Sort")}>Selection Sort</button>
 
                 <button onClick={this.startSort.bind(this)}>Start button Temp </button>
                 <button onClick={this.stopSort.bind(this)}>Stop button Temp </button>
@@ -470,7 +487,7 @@ export default class Visualiser extends React.Component{
                     <p>startsort state: {this.state.sort}</p>
                 </div>
                 <div>
-                    <Controller/>
+                    <Controller sortSpeedCallback = {this.updateSpeed.bind(this)}/>
                 </div>
             </div>
         );

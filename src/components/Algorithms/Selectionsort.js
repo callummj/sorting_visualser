@@ -18,7 +18,7 @@ function SelectionSort(data){
             steps.push([...data]);
         }
     }
-
-
     return steps;
 }export default SelectionSort;
+
+//https://www.geeksforgeeks.org/selection-sort/
