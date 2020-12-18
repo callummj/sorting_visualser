@@ -1,20 +1,19 @@
 function SelectionSort(data){
     let steps = [];
 
-    let n = data.length;
+    let length = data.length;
 
-    for(let i = 0; i < n; i++) {
-        // Finding the smallest number in the subarray
+    for(let i = 0; i < length; i++) {
         let smallestInt = i;
-        for(let j = i+1; j < n; j++){
-            if(data[j] < data[smallestInt]) {
+        for(let j = i+1; j < length; j++){
+            if(data[j] < data[smallestInt]) { //if the index on the right array is smaller the current record then overwrite this
                 smallestInt=j;
             }
         }
         if (smallestInt != i) {
-            let tmp = data[i];
+            let temp = data[i];
             data[i] = data[smallestInt];
-            data[smallestInt] = tmp;
+            data[smallestInt] = temp;
             steps.push([...data]);
         }
     }
