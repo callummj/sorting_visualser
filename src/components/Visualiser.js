@@ -96,17 +96,16 @@ export default class Visualiser extends React.Component{
 
     //Creates a bar representing each piece of data in the array, using CSS capsulated in a <div>
     dataToBars = (algorithm) => {
-
-
+        let areaSize = "split-" + this.state.algorithms.length; //how many algorithms are being sorted
         switch (algorithm){
             case "Quick Sort":
                 return(
+                    <div className={areaSize}>
                     <div className={"Quick-Sort-Area"}>
                         <div>
                             <button className={"close-button"} onClick={()=>this.removeAlgorithm("Quick Sort")}>x</button>
-
                         <h2>{algorithm}</h2>
-                        <div id = "quicksort-bars">
+                        <div className={"bars"} id = "quicksort-bars">
                         {
                             this.state.quickSortData.map(i => (
                                 <div key = {Math.random() * 100} className="arraybar"  style={{
@@ -114,18 +113,21 @@ export default class Visualiser extends React.Component{
                                 }}/>
                             ))}
                         </div></div>
-                    </div>)
+                    </div></div>)
 
                 break;
             case "Bubble Sort":
                 return(
+                    <div className={areaSize}>
+
+
                     <div className={"Bubble-Sort-Area"}>
                         <div>
 
                             <button className={"close-button"} onClick={()=>this.removeAlgorithm("Bubble Sort")}>x</button>
                         <h2>{algorithm}</h2>
 
-                        <div id = "bubblesort-bars">
+                        <div className={"bars"} id = "bubblesort-bars">
                             {
                                 this.state.bubbleSortData.map(i => (
                                     <div key = {Math.random() * 100} className="arraybar"  style={{
@@ -134,35 +136,41 @@ export default class Visualiser extends React.Component{
                                 ))}
                         </div>
                         </div>
-                    </div>)
+                    </div></div>)
                 break;
             case "Insertion Sort":
 
                 return(
+                    <div className={areaSize}>
+
+
                     <div className={"Insertion-Sort-Area"}>
                         <div>
                             <button className={"close-button"} onClick={()=>this.removeAlgorithm("Insertion Sort")}>x</button>
 
                       <h2>{algorithm}</h2>
 
-                    <div id = "insertionsort-bars">
+                    <div className={"bars"} id = "insertionsort-bars">
                     {
                         this.state.insertionSortData.map(i => (
                             <div key = {Math.random() * 100} className="arraybar"  style={{
                                 height: `${i}px`,
                             }}/>
                         ))}
-                </div></div></div>)
+                </div></div></div> </div>)
                 break;
             case "Merge Sort":
                 return(
+                    <div className={areaSize}>
+
+
                     <div className={"Merge-Sort-Area"}>
 
 
                     <div> <button className={"close-button"} onClick={()=>this.removeAlgorithm("Merge Sort")}>x</button>
                         <h2>{algorithm}</h2>
 
-                    <div id = "mergesort-bars">
+                    <div className={"bars"} id = "mergesort-bars">
                     {
 
                         this.state.mergeSortData.map(i => (
@@ -170,17 +178,20 @@ export default class Visualiser extends React.Component{
                                 height: `${i}px`,
                             }}/>
                         ))}
-                </div></div></div>)
+                </div></div></div></div>)
                 break;
             case "Selection Sort":
                 return(
+                    <div className={areaSize}>
+
+
                     <div className={"Quick-Sort-Area"}>
 
 
                     <div><button className={"close-button"} onClick={()=>this.removeAlgorithm("Selection Sort")}>x</button>
                         <h2>{algorithm}</h2>
 
-                    <div id = "quicksort-bars">
+                    <div className={"bars"} id = "quicksort-bars">
                     {
                         this.state.selectionSortData.map(i => (
                             <div key = {Math.random() * 100} className="arraybar"  style={{
@@ -188,14 +199,14 @@ export default class Visualiser extends React.Component{
                             }}/>
                         ))}
                 </div>
-                    </div></div>)
+                    </div></div></div>)
                 break;
             default:
                 return(
                     <div>
                         <h2>{algorithm}</h2>
 
-                    <div id = "bars">
+                    <div className={"bars"}>
                     {
                         this.state.data.map(i => (
                             <div key = {Math.random() * 100} className="arraybar"  style={{
@@ -362,14 +373,41 @@ export default class Visualiser extends React.Component{
         }
     }
 
+
+    calcFloat(i){
+        if ((i%2) == 0){
+            return "right";
+        }else{
+            return "left";
+        }
+    }
+
+
+
     loopAlgs(){
-        return(
-            <div>
-                {(this.state.algorithms.map(i => (
-                    this.dataToBars(i)
-                )))}
-            </div>
-        );
+
+        if (this.state.algorithms.length == 1){
+            return(
+                <div className={"sortingArea"}>
+                    {(this.state.algorithms.map(i => (
+                        <div>
+                            {this.dataToBars(i)}
+                        </div>
+                    )))}
+                </div>
+            );
+        }else{
+            return(
+                <div className={"sortingArea"}>
+                    {(this.state.algorithms.map(i => (
+                        <div className={"algorithm"} style={{ float: this.calcFloat(i)}}>
+                            {this.dataToBars(i)}
+                        </div>
+                    )))}
+                </div>
+            );
+        }
+
     }
 
 
@@ -483,9 +521,6 @@ export default class Visualiser extends React.Component{
                 </div>
 
 
-                <div>
-                    <p>startsort state: {this.state.sort}</p>
-                </div>
                 <div>
                     <Controller sortSpeedCallback = {this.updateSpeed.bind(this)}/>
                 </div>

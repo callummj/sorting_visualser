@@ -1,62 +1,46 @@
-
-
-
-
+//initalise steps here so they are in scope
 let steps;
 
 function MergeSortDriver(data) {
-    console.log("here")
     steps = [];
     mergesort(data, 0, data.length);
-    for (let i = 0 ; i < steps.length; i++){
-        console.log(i);
-    }
     return steps;
-
 }
-function merge(a, lo, middle, hi) {
+//merge function for subarrays
+function merge(data, low, middle, high) {
     var temp = [];
-    var len = middle - lo;
+    var length = middle - low;
     var i, tempMiddle, tempLow;
     // save left subarray
-    for (i = 0; i < len; i++) {
+    for (i = 0; i < length; i++) {
         // animate this move
-        temp[i] = a[lo + i];
-        steps.push([...a]);
+        temp[i] = data[low + i];
+        steps.push([...data]);
     }
     // merge subarrays
     i = 0;
     tempMiddle = middle;
-    tempLow = lo;
-    while (i < len && tempMiddle < hi) {
-        if (temp[i] <= a[tempMiddle]) {
-            // animate this move
-
-            a[tempLow++] = temp[i++];
+    tempLow = low;
+    while ((i < length) && (tempMiddle < high)) {
+        if (temp[i] <= data[tempMiddle]) {
+            data[tempLow++] = temp[i++];
         } else {
-            // animate this move
-            a[tempLow++] = a[tempMiddle++];
-        }steps.push([...a]);
+            data[tempLow++] = data[tempMiddle++];
+        }steps.push([...data]);
     }
-    // copy the remaining elements
-    while (i < len) {
-        // animate this move
-        a[tempLow++] = temp[i++];
-        steps.push([...a]);
+    while (i < length) {
+        data[tempLow++] = temp[i++];
+        steps.push([...data]);
     }
 }
-
-
-function mergesort(array, lo, hi) {
-    if (hi - lo > 1) {
-        var middle = lo + ((hi - lo) >> 1);
-        mergesort(array, lo, middle);
-        mergesort(array, middle, hi);
-        merge(array, lo, middle, hi);
+function mergesort(array, low, high) {
+    if (high - low > 1) {
+        var middle = low + ((high - low) >> 1);
+        mergesort(array, low, middle);
+        mergesort(array, middle, high);
+        merge(array, low, middle, high);
     }
 }
-
-
 export default MergeSortDriver
 
 
